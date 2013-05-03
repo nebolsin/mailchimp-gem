@@ -21,7 +21,7 @@ class ExportTest < Test::Unit::TestCase
     end
 
     should "not throw exception if the Export API replies with a JSON hash containing a key called 'error'" do
-      Mailchimp::Export.stubs(:post).returns(Struct.new(:body).new({'error' => 'bad things'}.to_json))
+      Mailchimp::Export.stubs(:post).returns(Struct.new(:body).new({'error' => 'bad things', 'code' => '123'}.to_json))
 
       assert_nothing_raised do
         @api.say_hello(@body)
@@ -33,9 +33,11 @@ class ExportTest < Test::Unit::TestCase
       params = {:body => @body, :timeout => nil}
       Mailchimp::Export.stubs(:post).returns(Struct.new(:body).new({'error' => 'bad things', 'code' => '123'}.to_json))
 
-      assert_raise RuntimeError do
+      e = assert_raise Mailchimp::APIError do
         @api.say_hello(@body)
       end
+      assert_equal 'bad things', e.error
+      assert_equal '123', e.code
     end
   end
   private

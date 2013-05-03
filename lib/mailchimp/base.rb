@@ -40,7 +40,7 @@ module Mailchimp
         response = self.class.post(url, :body => params, :timeout => timeout)
         begin; response = JSON.parse(response.body); rescue; response = response.body ;end
         if @throws_exceptions && response.is_a?(Hash) && response["error"]
-          raise "Error from MailChimp API: #{response["error"]} (code #{response["code"]})"
+          raise Mailchimp::APIError response["error"], response["code"]
         end
         response
       end

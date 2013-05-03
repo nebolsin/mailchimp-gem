@@ -40,7 +40,7 @@ module Mailchimp
       end
 
       if @throws_exceptions && response.is_a?(Hash) && response["error"]
-        raise "Error from MailChimp API: #{response["error"]} (code #{response["code"]})"
+        raise Mailchimp::APIError.new(response['error'],response['code'])
       end
 
       response
