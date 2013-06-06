@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
   s.version     = Mailchimp::VERSION
   s.authors     = ["Chris Kelly", "Dave Worth"]
   s.email       = ["dave@bignerdranch.com"]
-  s.homepage    = "chris@highgroove.co://github.com/mailchimp/mailchimp-gem"
+  s.homepage    = "https://github.com/mailchimp/mailchimp-gem"
   s.summary     = %q{Mailchimp APIs in Ruby}
   s.description = %q{This provides Ruby access to (eventually) all of Mailchimp's APIs}
 
@@ -17,9 +17,9 @@ Gem::Specification.new do |s|
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
-  
+
   s.add_dependency('httparty')
-  
+
   s.add_development_dependency('ruby-debug19')
   s.add_development_dependency('rake')
   s.add_development_dependency('shoulda')
