@@ -4,7 +4,7 @@ end
 
 module Mailchimp
   class Mandrill < Base
-    parser MailchimpPsuedoJSONParser
+    parser MailchimpPseudoJSONParser
 
     def initialize(api_key = nil, default_parameters = {})
       super(api_key, {
