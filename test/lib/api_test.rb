@@ -115,22 +115,26 @@ class ApiTest < Test::Unit::TestCase
       @returns = Struct.new(:body).new(["array", "entries"].to_json)
     end
 
-    should "throw exception if configured to and the API replies with a JSON hash containing a key called 'error'" do
-      Mailchimp::API.stubs(:post).returns(Struct.new(:body).new({'error' => 'bad things'}.to_json))
+    should "not throw exception if the API replies with a JSON hash containing a key called 'error'" do
+      Mailchimp::API.stubs(:post).returns(Struct.new(:body).new({'error' => 'bad things', 'code' => '254'}.to_json))
       assert_nothing_raised do
         result = @api.say_hello
+        assert_equal 'bad things', result['error']
+        assert_equal '254', result['code']
       end
-
-      ap result
     end
 
     should "throw exception if configured to and the API replies with a JSON hash containing a key called 'error'" do
       @api.throws_exceptions = true
-      Mailchimp::API.stubs(:post).returns(Struct.new(:body).new({'error' => 'bad things'}.to_json))
-      assert_raise RuntimeError do
+      Mailchimp::API.stubs(:post).returns(Struct.new(:body).new({'error' => 'bad things', 'code' => '254'}.to_json))
+      e = assert_raise Mailchimp::APIError do
         @api.say_hello
       end
+
+      assert_equal 'bad things', e.error
+      assert_equal '254', e.code
     end
+
     should 'allow one to check api key validity' do
       Mailchimp::API.stubs(:post).returns(Struct.new(:body).new(%q{"Everything's Chimpy!"}.to_json))
       assert_equal true, @api.valid_api_key?
